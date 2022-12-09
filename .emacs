@@ -13,6 +13,10 @@
 (require 'company)
 (global-company-mode)
 
+;; expand region
+(require 'expand-region)
+(global-set-key (kbd "C-=") 'er/expand-region)
+
 ;; sonar lint
 ;; (require 'lsp-sonarlint)
 ;; (require 'lsp-sonarlint-php)
@@ -76,7 +80,7 @@
  '(ispell-dictionary nil)
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(phpunit web-mode gruvbox-theme go-mode lsp-mode company magit tuareg ace-jump-mode smartparens php-mode gruber-darker-theme evil smex))
+   '(expand-region phpunit web-mode gruvbox-theme go-mode lsp-mode company magit tuareg ace-jump-mode smartparens php-mode gruber-darker-theme evil smex))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
  '(safe-local-variable-values '((eval when (fboundp 'rainbow-mode) (rainbow-mode 1))))
  '(tool-bar-mode nil))
