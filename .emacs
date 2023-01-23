@@ -1,46 +1,84 @@
+;; melpa
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(smex-initialize)
-(global-set-key (kbd "M-x") 'smex)
 
-;; smartparens
-(require 'smartparens-config)
-;; add smartparens to all buffer types :)
-(add-hook 'buffer-list-update-hook #'smartparens-mode)
+;; make sure that use-package is installed
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+(eval-when-compile
+  (require 'use-package))
 
-;; company 
-(require 'company)
-(global-company-mode)
-(setq company-idle-delay 0)
+;; (use-package foo) -> loads package named foo iff foo is available on system
+;; :init   -> execute code before package is loaded
+;; :config -> execute code after package is loaded
 
-;; projectile
-(projectile-mode +1)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-
-
-;; expand region
-(require 'expand-region)
-(global-set-key (kbd "C-=") 'er/expand-region)
-
-;; lsp
-(require 'lsp-mode)
-(add-hook 'php-mode-hook #'lsp)
-(add-hook 'go-mode-hook #'lsp)
-
-;; web-mode
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.php\\'" . php-mode))
-(add-to-list 'auto-mode-alist '("\\.blade\\.php\\'" . web-mode))
-(setq web-mode-engines-alist
-  '(("blade"  . "\\.blade\\."))
+;; company mode (completion)
+(use-package company
+  :ensure t
+  :init
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1)
+  :config
+  (global-company-mode)
   )
 
-;; php doc
-(add-to-list 'load-path "~/.emacs.d/emacs-php-doc-block")
-(require 'php-doc-block)
-(add-hook 'php-mode-hook
-          (lambda ()
-              (local-set-key (kbd "<C-tab>") 'php-doc-block)))
+;; smex (ido completion)
+(use-package smex
+  :ensure t
+  :bind
+  ("M-x" . smex)
+  :config
+  (smex-initialize)
+  )
+
+;; smartparens
+(use-package smartparens
+  :ensure t
+  :init (require 'smartparens-config)
+  :config (smartparens-global-mode t)
+  )
+
+(use-package expand-region
+  :ensure t
+  :bind ("C-=" . er/expand-region)
+  )
+
+(use-package which-key
+  :ensure t
+  :config
+  (which-key-mode)
+  )
+
+(use-package flycheck
+  :ensure t
+  :unless ".emacs"
+  :config (global-flycheck-mode)
+  )
+
+(use-package lsp-mode
+  :ensure t
+  )
+
+(use-package lsp-ui
+  :ensure t
+  :bind
+  ("C-c r" . lsp-ui-peek-find-references)
+  ("C-c d" . lsp-ui-peek-find-definitions)
+  :init
+  (setq lsp-ui-doc-delay 0.5)
+  (setq lsp-ui-doc-show-with-cursor t)
+  (setq lsp-ui-doc-show-with-mouse t)
+  :config (lsp-ui-mode)
+  )
+
+;; go-mode
+(use-package go-mode
+  :ensure t
+  :hook (go-mode . lsp-deferred)
+         (before-save-hook . lsp-format-buffer)
+         (before-save-hook . lsp-organize-imports)
+         (before-save-hook . lsp-go-install-save-hooks)
+  )
 
 ;; pending delete mode
 (pending-delete-mode t)
@@ -64,10 +102,6 @@
 ;; allow symlinks
 (setq vc-follow-symlinks t)
 
-;; add personal theme to theme list
-(add-to-list 'custom-theme-load-path
-             "/home/bitor/projects/ruber-darker-theme")
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -87,7 +121,7 @@
  '(ispell-dictionary nil)
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(vterm projectile doom-themes sweet-theme expand-region phpunit web-mode gruvbox-theme go-mode lsp-mode company magit tuareg ace-jump-mode smartparens php-mode gruber-darker-theme evil smex))
+   '(flycheck which-key smartparens-config use-package yaml-mode fold-this undo-tree lsp-ui vterm projectile doom-themes sweet-theme expand-region phpunit web-mode gruvbox-theme go-mode lsp-mode company magit tuareg ace-jump-mode smartparens php-mode gruber-darker-theme evil smex))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
  '(safe-local-variable-values '((eval when (fboundp 'rainbow-mode) (rainbow-mode 1))))
  '(tool-bar-mode nil))
