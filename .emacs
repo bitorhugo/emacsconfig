@@ -106,6 +106,9 @@
 (add-hook 'lsp-mode-hook #'lsp-lens-mode)
 (add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
 
+;; delve
+(require 'dap-dlv-go)
+
 (pending-delete-mode t)
 
 ;; visual stuff
