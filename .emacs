@@ -52,8 +52,19 @@
   :config (global-flycheck-mode)
   )
 
+(use-package projectile
+  :ensure t
+  :config (projectile-mode t)
+  )
+
 (use-package lsp-mode
   :ensure t
+  :config 
+  )
+
+(use-package dap-mode
+  :ensure t
+  :after lsp-mode
   )
 
 (use-package lsp-ui
@@ -68,6 +79,15 @@
   :config (lsp-ui-mode)
   )
 
+(use-package lsp-java
+  :ensure t
+  :config (add-hook 'java-mode-hook #'lsp)
+  )
+
+(use-package dap-java
+  :ensure nil
+  )
+
 (use-package go-mode
   :ensure t
   :hook (go-mode . lsp-deferred)
@@ -79,6 +99,12 @@
 ;; add hoks to c-modes
 (add-hook 'c-mode-hook 'lsp)
 (add-hook 'c++-mode-hook 'lsp)
+(require 'dap-cpptools)
+
+;; java spring
+(require 'lsp-java-boot)
+(add-hook 'lsp-mode-hook #'lsp-lens-mode)
+(add-hook 'java-mode-hook #'lsp-java-boot-lens-mode)
 
 (pending-delete-mode t)
 
@@ -119,7 +145,7 @@
  '(ispell-dictionary nil)
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(ccls flycheck which-key smartparens-config use-package yaml-mode fold-this undo-tree lsp-ui vterm projectile doom-themes sweet-theme expand-region phpunit web-mode gruvbox-theme go-mode lsp-mode company magit tuareg ace-jump-mode smartparens php-mode gruber-darker-theme evil smex))
+   '(lsp-java dap-mode ccls flycheck which-key smartparens-config use-package yaml-mode fold-this undo-tree lsp-ui vterm projectile doom-themes sweet-theme expand-region phpunit web-mode gruvbox-theme go-mode lsp-mode company magit tuareg ace-jump-mode smartparens php-mode gruber-darker-theme evil smex))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
  '(safe-local-variable-values '((eval when (fboundp 'rainbow-mode) (rainbow-mode 1))))
  '(tool-bar-mode nil))
