@@ -1,5 +1,3 @@
-
-
 ;; melpa
 (package-initialize)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
@@ -57,6 +55,12 @@
   :ensure t
   :config (yas-global-mode))
 
+(use-package origami
+  :ensure t
+  :bind (("C-c o" . origami-open-node)
+         ("C-c c" . origami-close-node))
+  :config (origami-mode))
+
 (use-package treemacs
   :ensure t
   :bind ("C-c t" . treemacs-select-window)
@@ -84,6 +88,13 @@
   :config (lsp-ui-mode)
   )
 
+(use-package pyvenv
+  :ensure t)
+
+(require 'dap-python)
+;; if you installed debugpy, you need to set this
+;; https://github.com/emacs-lsp/dap-mode/issues/306
+(setq dap-python-debugger 'debugpy)
 
 (use-package lsp-java
   :ensure t
@@ -147,9 +158,11 @@
 (setq make-backup-files nil) ; stop creating backup~ files
 (setq auto-save-default nil) ; stop creating #autosave# files
 
+(global-unset-key (kbd "C-z"))
+
 ;; custom commands
 (defun jcompile (args)
-  (interactive "MArgs:")
+  (interactive "MArgs: ")
   (shell-command (concat ". ~/projects/JCompile/build.sh" " " args)))
 
 ;; allow symlinks
@@ -174,7 +187,7 @@
  '(ispell-dictionary nil)
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(lsp-dart yasnippet lsp-intellij org org-mode lsp-pyright python-mode slime cyberpunk-theme CyberPunk lsp-java dap-mode ccls flycheck which-key smartparens-config use-package yaml-mode fold-this undo-tree lsp-ui vterm projectile sweet-theme expand-region phpunit web-mode go-mode lsp-mode company magit tuareg ace-jump-mode smartparens php-mode gruber-darker-theme evil smex))
+   '(origami pyvenv pyenv lsp-dart yasnippet lsp-intellij org org-mode lsp-pyright python-mode slime cyberpunk-theme CyberPunk lsp-java dap-mode ccls flycheck which-key smartparens-config use-package yaml-mode fold-this undo-tree lsp-ui vterm projectile sweet-theme expand-region phpunit web-mode go-mode lsp-mode company magit tuareg ace-jump-mode smartparens php-mode gruber-darker-theme evil smex))
  '(pdf-view-midnight-colors '("#fdf4c1" . "#1d2021"))
  '(safe-local-variable-values '((eval when (fboundp 'rainbow-mode) (rainbow-mode 1))))
  '(tool-bar-mode nil))
